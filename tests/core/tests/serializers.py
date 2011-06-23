@@ -278,6 +278,29 @@ class ResourceSerializationTestCase(TestCase):
         merged.update(request.FILES)
         self.assertEqual(data, merged)
 
+    def test_from_form(self):
+        request = HttpRequest()
+        request.META = {
+            "CONTENT_TYPE": "application/x-www-form-urlencoded"
+        }
+        request.POST = {"age": 27, "name": "Daniel"}
+        data = self.resource.deserialize(request)
+        self.assertEqual(data, request.POST)
+
+    def test_from_multipart_form(self):
+        request = HttpRequest()
+        request.META = {
+            "CONTENT_TYPE": "multipart/form-data"
+        }
+        request.POST = {"age": 27, "name": "Daniel"}
+        # Not valid files, testing purposes only
+        request.FILES = {"date_joined": "2010-03-27"}
+
+        data = self.resource.deserialize(request)
+        merged = request.POST.copy()
+        merged.update(request.FILES)
+        self.assertEqual(data, merged)
+
     def test_to_xml_multirepr(self):
         serializer = Serializer()
         self.assertEqual(serializer.to_xml(self.obj_list), '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<objects><object><updated>2010-03-30T20:05:00</updated><created>2010-03-30T20:05:00</created><title>First Post!</title><is_active type="boolean">True</is_active><slug>first-post</slug><content>This is my very first post using my shiny new API. Pretty sweet, huh?</content><id>1</id><resource_uri></resource_uri></object><object><updated>2010-03-31T20:05:00</updated><created>2010-03-31T20:05:00</created><title>Another Post</title><is_active type="boolean">True</is_active><slug>another-post</slug><content>The dog ate my cat today. He looks seriously uncomfortable.</content><id>2</id><resource_uri></resource_uri></object><object><updated>2010-04-01T20:05:00</updated><created>2010-04-01T20:05:00</created><title>Recent Volcanic Activity.</title><is_active type="boolean">True</is_active><slug>recent-volcanic-activity</slug><content>My neighborhood\'s been kinda weird lately, especially after the lava flow took out the corner store. Granny can hardly outrun the magma with her walker.</content><id>4</id><resource_uri></resource_uri></object><object><updated>2010-04-02T10:05:00</updated><created>2010-04-02T10:05:00</created><title>Granny\'s Gone</title><is_active type="boolean">True</is_active><slug>grannys-gone</slug><content>Man, the second eruption came on fast. Granny didn\'t have a chance. On the upshot, I was able to save her walker and I got a cool shawl out of the deal!</content><id>6</id><resource_uri></resource_uri></object></objects>')
