@@ -158,7 +158,7 @@ class Serializer(object):
         Given some data and a format, calls the correct method to serialize
         the data and returns the result.
         """
-        desired_format = None
+        desired_format = getattr(settings, 'TASTYPIE_DEFAULT_CONTENT_FORMAT', None)
 
         for short_format, long_format in self.content_types.items():
             if format == long_format:
@@ -177,7 +177,7 @@ class Serializer(object):
         Given some data and a format, calls the correct method to deserialize
         the data and returns the result.
         """
-        desired_format = None
+        desired_format = getattr(settings, 'TASTYPIE_DEFAULT_CONTENT_FORMAT', None)
 
         format = format.split(';')[0]
 
