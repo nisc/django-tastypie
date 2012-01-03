@@ -254,7 +254,7 @@ class ResourceSerializationTestCase(TestCase):
         self.obj_list = [self.resource.full_dehydrate(self.resource.build_bundle(obj=obj)) for obj in self.resource.obj_get_list()]
         self.another_resource = AnotherNoteResource()
         self.another_obj_list = [self.another_resource.full_dehydrate(self.resource.build_bundle(obj=obj)) for obj in self.another_resource.obj_get_list()]
-    
+
     def test_from_form(self):
         request = HttpRequest()
         request.META = {
@@ -272,7 +272,7 @@ class ResourceSerializationTestCase(TestCase):
         request.POST = {"age": 27, "name": "Daniel"}
         # Not valid files, testing purposes only
         request.FILES = {"date_joined": "2010-03-27"}
-        
+
         data = self.resource.deserialize(request)
         merged = request.POST.copy()
         merged.update(request.FILES)

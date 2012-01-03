@@ -333,7 +333,7 @@ class Resource(object):
             options['callback'] = callback
 
         return self._meta.serializer.serialize(data, format, options)
-    
+
     def deserialize(self, request, format=None):
         """
         Given a request, data and a format, deserializes the given data.
@@ -345,7 +345,7 @@ class Resource(object):
         """
         if format is None:
             format = request.META.get('CONTENT_TYPE', 'application/json')
-        
+
         if format == 'application/x-www-form-urlencoded':
             deserialized = request.POST
         elif format.startswith('multipart'):
@@ -353,7 +353,7 @@ class Resource(object):
             deserialized.update(request.FILES)
         else:
             deserialized = self._meta.serializer.deserialize(request.raw_post_data, format=format)
-        
+
         return deserialized
 
     def alter_list_data_to_serialize(self, request, data):
