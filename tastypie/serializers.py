@@ -322,14 +322,14 @@ class Serializer(object):
             else:
                 return None
 
-    def to_json(self, data, options=None):
+    def to_json(self, data, options=None, indent=False):
         """
         Given some Python data, produces JSON output.
         """
         options = options or {}
         data = self.to_simple(data, options)
         return simplejson.dumps(data, cls=json.DjangoJSONEncoder,
-                sort_keys=True, indent=4 if settings.DEBUG else 0)
+                sort_keys=True, indent=4 if (settings.DEBUG or indent) else 0)
 
     def from_json(self, content):
         """
@@ -407,14 +407,14 @@ class Serializer(object):
 
     def to_html(self, data, options=None):
         """
-        Reserved for future usage.
+        Temporary solution that wraps self.to_json.
 
         The desire is to provide HTML output of a resource, making an API
         available to a browser. This is on the TODO list but not currently
         implemented.
         """
-        options = options or {}
-        return 'Sorry, not implemented yet. Please append "?format=json" to your URL.'
+        json_formatted =  self.to_json(data, options, indent=True)
+        return '<html><body><pre>%s</pre><html>' % json_formatted
 
     def from_html(self, content):
         """
