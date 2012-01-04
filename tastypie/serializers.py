@@ -414,7 +414,7 @@ class Serializer(object):
         implemented.
         """
         json_formatted =  self.to_json(data, options, indent=True)
-        return '<html><body><pre>%s</pre><html>' % json_formatted
+        return '<html><body><pre>%s</pre></body></html>' % json_formatted
 
     def from_html(self, content):
         """
