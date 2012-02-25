@@ -1,7 +1,6 @@
 from django.conf import settings
-
-from tests.testcases import TestServerTestCase
 import httplib
+from testcases import TestServerTestCase
 try:
     import json
 except ImportError:
